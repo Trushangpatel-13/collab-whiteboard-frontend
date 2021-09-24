@@ -7,7 +7,7 @@ class Board extends React.Component {
 
     timeout;
     //socket = io.connect("http://localhost:3000");
-    socket = io.connect("http://collab-whiteboard-backend.herokuapp.com/");
+    socket = io.connect("https://collab-whiteboard-backend.herokuapp.com/");
 
     ctx;
     isDrawing = false;
@@ -115,7 +115,7 @@ class Board extends React.Component {
             root.timeout = setTimeout(function(){
                 var base64ImageData = canvas.toDataURL("image/png");
                 root.socket.emit("canvas-data", base64ImageData);
-            }, 1000)
+            }, 500)
         };
     }
 
