@@ -16,6 +16,7 @@ class Board extends React.Component {
         super(props);
         
         this.clearAll = this.clearAll.bind(this);
+        this.copyAll = this.copyAll.bind(this);
         
         this.socket.on("canvas-data", function(data){
 
@@ -38,7 +39,7 @@ class Board extends React.Component {
     }
 
     clearAll() {
-        var root = this;
+        
         var canvas = document.querySelector('#board');
         this.ctx = canvas.getContext('2d');
         var ctx = this.ctx;
@@ -50,13 +51,31 @@ class Board extends React.Component {
         ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
         var base64ImageData = canvas.toDataURL("image/png");
-        root.socket.emit("canvas-data", base64ImageData);
+        this.socket.emit("canvas-data", base64ImageData);
 
         ctx.lineWidth = this.props.size;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
         ctx.strokeStyle = this.props.color;
       }
+    
+    copyAll() {
+        try {
+        var canvas = document.querySelector('#board');
+        canvas.toBlob(function(blob) { 
+            navigator.clipboard.write([
+                new window.ClipboardItem({
+                  "image/png": blob
+                })
+              ]);
+              console.log('Image copied.');
+              alert("Copied to Clipboard");
+            
+        });
+        } catch (err) {
+            console.error(err.name, err.message);
+          }
+    }
     componentDidMount() {
         this.drawOnCanvas();
     }
@@ -120,12 +139,15 @@ class Board extends React.Component {
     }
 
     render() {
+        var canimg = this; 
         return (
             <div class="sketch" id="sketch">
                 
                 <canvas className="board" id="board"></canvas>
                 <div className="tools-container">
                     <button type="button" onClick={this.clearAll}>Clear All</button>
+                    <button type="button" onClick={this.copyAll}>Copy to Clipboard</button>
+                    
                 </div>
             </div>
         )
