@@ -101,6 +101,7 @@ class Board extends React.Component {
             };
             console.log(requestOptions)
             let link = process.env.link + "/ocr"
+            console.log(link)
             const response = await fetch(link, requestOptions)
             console.log(response)
             } catch (err) {
