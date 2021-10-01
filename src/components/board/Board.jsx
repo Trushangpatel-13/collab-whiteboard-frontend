@@ -1,6 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
-
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import './style.css';
 
 class Board extends React.Component {
@@ -17,6 +17,7 @@ class Board extends React.Component {
         
         this.clearAll = this.clearAll.bind(this);
         this.copyAll = this.copyAll.bind(this);
+        this.performOCR = this.performOCR.bind(this);
         
         this.socket.on("canvas-data", function(data){
 
@@ -75,6 +76,35 @@ class Board extends React.Component {
         } catch (err) {
             console.error(err.name, err.message);
           }
+    }
+    async performOCR(){
+        console.log("Perform OCR")
+        try {
+            var canvas = document.querySelector('#board');
+            var img    = canvas.toDataURL("image/png");
+            let encoded = base64_encode(img);
+            //b64_str = img.replace("data:image/png;base64,","")
+            //console.log(img)
+            //console.log(typeof encoded)
+            //console.log(b64_str)
+            var data = {"file":encoded} 
+            console.log(typeof encoded)
+            console.log(img)
+            
+            console.log(encoded)
+            
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Accept':'*/*','Accept-Encoding':'gzip, deflate, br',
+                'Access-Control-Allow-Origin':'*'},
+                body: data
+            };
+            console.log(requestOptions)
+            const response = await fetch('http://0223-35-231-7-42.ngrok.io/ocr', requestOptions)
+            console.log(response)
+            } catch (err) {
+                console.error(err.name, err.message);
+            }
     }
     componentDidMount() {
         this.drawOnCanvas();
@@ -147,6 +177,7 @@ class Board extends React.Component {
                 <div className="tools-container">
                     <button type="button" onClick={this.clearAll}>Clear All</button>
                     <button type="button" onClick={this.copyAll}>Copy to Clipboard</button>
+                    <button type="button" onClick={this.performOCR}>Perform OCR</button>
                     
                 </div>
             </div>
