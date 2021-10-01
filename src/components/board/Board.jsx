@@ -87,7 +87,7 @@ class Board extends React.Component {
             //console.log(img)
             //console.log(typeof encoded)
             //console.log(b64_str)
-            var data = {"file":encoded} 
+            var data = {"file":img} 
             console.log(typeof encoded)
             console.log(img)
             
@@ -102,7 +102,7 @@ class Board extends React.Component {
             console.log(requestOptions)
             let link = ""
             link.concat(process.env.server_path,"/ocr")
-            
+            console.log(link)
             const response = await fetch(link, requestOptions)
             console.log(response)
             } catch (err) {
