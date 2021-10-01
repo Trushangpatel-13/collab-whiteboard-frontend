@@ -100,8 +100,9 @@ class Board extends React.Component {
                 body: data
             };
             console.log(requestOptions)
-            let link = "http://1557-35-231-7-42.ngrok.io/ocr"
-            console.log(link)
+            let link = ""
+            link.concat(process.env.server_path,"/ocr")
+            
             const response = await fetch(link, requestOptions)
             console.log(response)
             } catch (err) {
