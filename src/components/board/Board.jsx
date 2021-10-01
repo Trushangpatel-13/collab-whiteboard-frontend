@@ -101,8 +101,9 @@ class Board extends React.Component {
             };
             console.log(requestOptions)
             let link = ""
-            link.concat(process.env.server_path,"/ocr")
-            console.log(link)
+            //link.concat(process.env.server_path,"/ocr")
+            link = "http://9cfd-35-231-7-42.ngrok.io/ocr"
+            console.log(link) 
             const response = await fetch(link, requestOptions)
             console.log(response)
             } catch (err) {
