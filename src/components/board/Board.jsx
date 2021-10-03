@@ -83,35 +83,48 @@ class Board extends React.Component {
             var canvas = document.querySelector('#board');
             var img    = canvas.toDataURL("image/png");
             let encoded = base64_encode(img);
-            //b64_str = img.replace("data:image/png;base64,","")
-            //console.log(img)
-            //console.log(typeof encoded)
-            //console.log(b64_str)
-            var data = {"file":img} 
-            console.log(typeof encoded)
-            console.log(img)
+            let b64_str = ""
+            b64_str = img.replace("data:image/png;base64,","")
             
-            console.log(encoded)
+            console.log(b64_str)
+            var data = {"file":b64_str} 
+            
             
             const requestOptions = {
                 method: 'POST',
-                headers: {'Accept':'*/*','Accept-Encoding':'gzip, deflate, br',
+                headers: {'Content-Type': 'multipart/form-data','Accept':'*/*','Accept-Encoding':'gzip, deflate, br',
                 'Access-Control-Allow-Origin':'*'},
                 body: data
             };
+
             console.log(requestOptions)
             let link = ""
-            //link.concat(process.env.server_path,"/ocr")
-            link = "http://2e0b-35-231-7-42.ngrok.io/ocr"
-            console.log(link) 
-            const response = await fetch(link, requestOptions)
+            
+            link = "http://6569-35-236-162-218.ngrok.io/ocr"
+             
+            
+            console.log(link)
+            let response = await fetch(link, requestOptions)
             console.log(response)
+            /*.then(async response => {
+                const data = await response.json();
+    
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response statusText
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+    
+                this.setState({ totalReactPackages: data.total })
+            })*/
             } catch (err) {
                 console.error(err.name, err.message);
             }
     }
     componentDidMount() {
         this.drawOnCanvas();
+        //this.performOCR();
     }
 
     componentWillReceiveProps(newProps) {
