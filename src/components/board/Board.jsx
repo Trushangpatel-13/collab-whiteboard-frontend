@@ -2,6 +2,8 @@ import React from 'react';
 import io from 'socket.io-client';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 import './style.css';
+import axios from 'axios';
+var sizeof = require('object-sizeof')
 
 class Board extends React.Component {
 
@@ -77,37 +79,43 @@ class Board extends React.Component {
             console.error(err.name, err.message);
           }
     }
-    async performOCR(){
+    performOCR(){
         console.log("Perform OCR")
         try {
             var canvas = document.querySelector('#board');
             var img    = canvas.toDataURL("image/png");
-            let encoded = base64_encode(img);
-            let b64_str = ""
-            b64_str = img.replace("data:image/png;base64,","")
             
+            let b64_str = img.replace("data:image/png;base64,","")
+            console.log(img)
             console.log(b64_str)
-            var data = {"file":b64_str} 
-            
-            
+             
+            //let data = new FormData();
+            //data.append('file', b64_str);
+            /*
+            var dataSize = sizeof(data)
+            console.log(dataSize)
             const requestOptions = {
                 method: 'POST',
-                headers: {'Content-Type': 'multipart/form-data','Accept':'*/*','Accept-Encoding':'gzip, deflate, br',
-                'Access-Control-Allow-Origin':'*'},
-                body: data
+                headers: {
+                'Content-Type':'multupart/form-data',  
+                'Access-Control-Allow-Origin':'*',
+                'Accept': 'application/json',
+                'Content-Length': String(dataSize)
+            },
+            body: data
+                
             };
 
             console.log(requestOptions)
             let link = ""
             
-            link = "http://6569-35-236-162-218.ngrok.io/ocr"
+            link = "http://localhost:5000/"
              
             
             console.log(link)
-            let response = await fetch(link, requestOptions)
-            console.log(response)
-            /*.then(async response => {
-                const data = await response.json();
+            fetch(link, requestOptions)
+            .then(response => {
+                const data = response.json();
     
                 // check for error response
                 if (!response.ok) {
@@ -118,9 +126,28 @@ class Board extends React.Component {
     
                 this.setState({ totalReactPackages: data.total })
             })*/
+            var bodyFormData = new FormData();
+            bodyFormData.append('file', b64_str);
+            axios({
+                method:'POST',
+                //url:'http://localhost:5000/ocr',
+                url:'http://f880-34-83-252-81.ngrok.io/ocr',
+                data : bodyFormData,
+                headers: {"Content-Type":"multipart/form-data"}
+            
+        })
+    	    .then(res => {
+      	    console.log(res)
+      	    
+            })
+    	    .catch(error => {
+      	    console.log(`error = ${error}`)
+            })
+
             } catch (err) {
                 console.error(err.name, err.message);
             }
+            
     }
     componentDidMount() {
         this.drawOnCanvas();
