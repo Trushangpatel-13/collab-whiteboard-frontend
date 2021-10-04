@@ -86,8 +86,8 @@ class Board extends React.Component {
             var img    = canvas.toDataURL("image/png");
             
             let b64_str = img.replace("data:image/png;base64,","")
-            console.log(img)
-            console.log(b64_str)
+            //console.log(img)
+            //console.log(b64_str)
              
             //let data = new FormData();
             //data.append('file', b64_str);
@@ -137,7 +137,7 @@ class Board extends React.Component {
             
         })
     	    .then(res => {
-      	    console.log(res)
+      	    console.log(res.data)
       	    
             })
     	    .catch(error => {
