@@ -9,7 +9,7 @@ class Board extends React.Component {
 
     timeout;
     //socket = io.connect("http://localhost:3000");
-    socket = io.connect("https://collab-whiteboard-backend.herokuapp.com/");
+    socket = io.connect("http://collab-whiteboard-backend.herokuapp.com/");
 
     ctx;
     isDrawing = false;
